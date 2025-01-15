@@ -1,0 +1,41 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           python 1.0
+PortGroup           compiler_wrapper 1.0
+
+name                py-numba
+version             0.61.0
+revision            0
+categories-append   devel
+license             BSD
+
+python.versions     39 310 311 312 313
+
+maintainers         {stromnov @stromnov} openmaintainer
+
+description         Numba is a NumPy aware dynamic compiler for Python.
+
+long_description    Numba is an Open Source NumPy-aware optimizing compiler \
+                    for Python. It uses the remarkable LLVM compiler \
+                    infrastructure to compile Python syntax to machine code.
+
+homepage            https://numba.pydata.org/
+
+checksums           rmd160  24ad7e2b105f30cd2d34e5929f02aaf1b63358f4 \
+                    sha256  eeac64b71f0cc93f2f88413dfcd19466852e328069439cfca4ca57fafa52e85b \
+                    size    2884884
+
+variant tbb description "Add support for TBB" {
+    if {$subport ne $name} {
+        depends_lib-append  port:onetbb
+        build.env-append    TBBROOT=${prefix}/libexec/onetbb
+    }
+}
+
+if {${name} ne ${subport}} {
+    compiler.openmp_version 2.5
+
+    depends_lib-append  port:py${python.version}-llvmlite \
+                        port:py${python.version}-numpy
+}

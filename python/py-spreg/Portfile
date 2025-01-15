@@ -1,0 +1,42 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           python 1.0
+
+name                py-spreg
+version             1.7
+revision            0
+
+categories-append   gis
+
+platforms           {darwin any}
+supported_archs     noarch
+license             BSD
+maintainers         nomaintainer
+
+description         PySAL Spatial Econometrics Package (spreg)
+long_description    {*}${description}, short for “spatial regression”, is a \
+                    Python package to estimate simultaneous autoregressive \
+                    spatial regression models. These models are useful when \
+                    modeling processes where observations interact with one \
+                    another.
+
+homepage            https://pysal.org/spreg/
+
+checksums           rmd160  ad7069abe71d2f86da5207387da39f145d8be1ba \
+                    sha256  a84582766c6356b92d55c4f9863ae8d2f74542bd61ad6eb199f81ee5b5c518e5 \
+                    size    461509
+
+python.versions     39 310 311 312 313
+
+if {${name} ne ${subport}} {
+    depends_build-append \
+                    port:py${python.version}-setuptools_scm
+
+    depends_run-append \
+                    port:py${python.version}-libpysal \
+                    port:py${python.version}-numpy \
+                    port:py${python.version}-pandas \
+                    port:py${python.version}-scikit-learn \
+                    port:py${python.version}-scipy
+}

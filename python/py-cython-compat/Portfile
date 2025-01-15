@@ -1,0 +1,48 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           python 1.0
+PortGroup           github 1.0
+
+github.setup        cython cython 0.29.37.1
+name                py-cython-compat
+python.rootname     Cython
+categories-append   devel
+license             Apache-2
+
+python.versions     27 35 36 37 38 39 310 311 312 313
+
+maintainers         {jmr @jmroot} openmaintainer
+
+description         Older version of Cython for compatibility
+
+long_description    This is an older version of Cython for the use of \
+                    ports that are not compatible with the current \
+                    version as provided by the py-cython port.
+
+homepage            http://www.cython.org/
+
+dist_subdir         py-cython
+checksums           md5     1a4ecd5fabc58c89b8027670d0768c22 \
+                    rmd160  8cce7268abf800623fc715cadf3fefdd746a6448 \
+                    sha256  51eb5fe81e26c516ef870217b192a809e0db799551a0a4fb78699bf4f7c3bc94 \
+                    size    2115623
+
+if {${name} ne ${subport}} {
+    depends_lib-append \
+                        port:py${python.version}-setuptools
+
+    # https://github.com/macports/macports-ports/commit/760996927a0a2b5c0d9871670155d64f840dff8e#commitcomment-74373855
+    compiler.blacklist-append *gcc-3.* *gcc-4.*
+
+    if {${python.pep517}} {
+        destroot.args   --prefix ${prefix}/lib/${subport}
+    } else {
+        destroot.destdir    --prefix=${prefix}/lib/${subport} --root=${destroot}
+    }
+
+    livecheck.type      none
+}
+
+livecheck.url https://pypi.org/simple/Cython/
+livecheck.regex {(0\.[0-9]+\.[0-9]+)}
